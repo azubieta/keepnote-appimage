@@ -23,8 +23,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build AppImage
-      # You may pin to the exact commit or the version.
-      # uses: AppImageCrafters/build-appimage-action@2f48abf7a0e74a879ac316eabd3c0db954515eb3
-      uses: AppImageCrafters/build-appimage-action@v1
-      with:
-        recipe: appimage-builder.yml
+        # You may pin to the exact commit or the version.
+        # uses: AppImageCrafters/build-appimage-action@2f48abf7a0e74a879ac316eabd3c0db954515eb3
+        uses: AppImageCrafters/build-appimage-action@v1
+        with:
+          recipe: appimage-builder.yml
