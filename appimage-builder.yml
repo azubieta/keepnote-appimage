@@ -1,0 +1,93 @@
+version: 1
+script:
+  # Remove any previous build
+  - rm -rf AppDir  || true
+  # Make usr and icons dirs
+  - mkdir -p AppDir/
+  - curl -o keepnote.deb "http://keepnote.org/download/keepnote_0.7.8-1_all.deb"
+  - dpkg-deb -x keepnote.deb AppDir
+  - mkdir -p AppDir/usr/lib/x86_64-linux-gnu/gio/modules
+  - cp /usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache AppDir/usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache
+
+
+AppDir:
+  path: ./AppDir
+
+  app_info:
+    id: org.keepnote.keepnote
+    name: keepnote
+    icon: keepnote
+    version: 0.7.8
+    # Set the python executable as entry point
+    exec: usr/bin/python2.7
+    # Set the application main script path as argument. Use '$@' to forward CLI parameters
+    exec_args: "$APPDIR/usr/bin/keepnote $@"
+
+  apt:
+    arch: amd64
+    sources:
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+
+    include:
+      - python2.7
+      - python-gtk2
+      - python-glade2
+      - gtk2-engines-pixbuf
+      - librsvg2-common
+      - hicolor-icon-theme
+      - liblzma5
+    exclude:
+      - humanity-icon-theme
+      - adwaita-icon-theme
+      - python3
+      - python3.6
+      - python3-minimal
+      - python3.6-minimal 
+      - perl
+      - perl-base
+      - pkg-config
+      - patch
+      - make
+      - dpkg-dev
+
+  runtime:
+    env:
+      # Set python home
+      # See https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHOME
+      PYTHONHOME: '${APPDIR}/usr'
+      # Path to the site-packages dir or other modules dirs
+      # See https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH
+      PYTHONPATH: '${APPDIR}/usr/lib/python2.7:${APPDIR}/usr/share/pyshared'
+      GTK_EXE_PREFIX: $APPDIR/usr/lib/x86_64-linux-gnu
+      GTK_PATH: $APPDIR/usr/lib/x86_64-linux-gnu/gtk-2.0
+      GTK_DATA_PREFIX: $APPDIR/usr
+    path_mappings:
+      - /usr/share/pyshared/keepnote:$APPDIR/usr/share/pyshared/keepnote;/usr/lib/x86_64-linux-gnu/gio/modules:$APPDIR/usr/lib/x86_64-linux-gnu/gio/modules
+
+  test:
+    fedora:
+      image: appimagecrafters/tests-env:fedora-30
+      command: ./AppRun
+      use_host_x: true
+    debian:
+      image: appimagecrafters/tests-env:debian-stable
+      command: ./AppRun
+      use_host_x: true
+    arch:
+      image: appimagecrafters/tests-env:archlinux-latest
+      command: ./AppRun
+      use_host_x: true
+    centos:
+      image: appimagecrafters/tests-env:centos-7
+      command: ./AppRun
+      use_host_x: true
+    ubuntu:
+      image: appimagecrafters/tests-env:ubuntu-xenial
+      command: ./AppRun
+      use_host_x: true
+
+AppImage:
+  update-information: None
+  sign-key: None
+  arch: x86_64 
