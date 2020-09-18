@@ -4,8 +4,8 @@ script:
   - rm -rf AppDir  || true
   # Make usr and icons dirs
   - mkdir -p AppDir/
-  - curl -o keepnote.deb "http://keepnote.org/download/keepnote_0.7.8-1_all.deb"
-  - dpkg-deb -x keepnote.deb AppDir
+  - wget "http://keepnote.org/download/keepnote_0.7.8-1_all.deb"
+  - dpkg-deb -x keepnote_0.7.8-1_all.deb AppDir
   - mkdir -p AppDir/usr/lib/x86_64-linux-gnu/gio/modules
   - cp /usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache AppDir/usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache
 
