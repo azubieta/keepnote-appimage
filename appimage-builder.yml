@@ -87,6 +87,6 @@ AppDir:
       use_host_x: true
 
 AppImage:
-  update-information: None
+  update-information: "gh-releases-zsync|azubieta|keepnote-appimage|latest|*x86_64.AppImage.zsync"
   sign-key: None
   arch: x86_64 
