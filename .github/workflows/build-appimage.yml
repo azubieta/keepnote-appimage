@@ -28,3 +28,14 @@ jobs:
         uses: AppImageCrafters/build-appimage-action@v1
         with:
           recipe: appimage-builder.yml
+      
+      - name: Release In-Development AppImage
+        uses: marvinpinto/action-automatic-releases@latest
+
+        with:
+          title: Latest
+          automatic_release_tag: 'latest'
+          prerelease: true
+          draft: false
+          files: ./*.AppImage*
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
